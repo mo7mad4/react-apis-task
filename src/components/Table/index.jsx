@@ -20,6 +20,7 @@ const Table = ({ isLoading, columns, data, onRowClick = () => {} }) => {
                 {columns.map((column) => (
                   <td key={`${row.id + column.key}`}>
                     {column.render ? column.render(row) : row[column.key]}
+                    {/* {row[column.key]} */}
                   </td>
                 ))}
               </tr>

@@ -1,6 +1,12 @@
 import React from 'react'
 import './style.css'
 
+export const H1 = ({ className = "", children }) => {
+    return (
+        <h2 className={className}>{children}</h2>
+    )
+}
+
 export const H2 = ({ className = "", children }) => {
     return (
         <h2 className={className}>{children}</h2>
