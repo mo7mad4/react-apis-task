@@ -1,0 +1,34 @@
+h1{
+    color: brown;
+    text-align: center;
+}
+p{
+    padding: 10px;
+    margin-left: 20px;
+}
+.actionbutton button{
+    width: 60px;
+    height: 30px;
+    margin: 20px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: medium;
+}
+button{
+    width: 60px;
+    height: 30px;
+    margin: 20px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: medium;
+}
+button[name="delete"]{
+    background-color: rgb(235, 76, 76);
+}
+button[name="edit"]{
+    background-color: forestgreen;
+}

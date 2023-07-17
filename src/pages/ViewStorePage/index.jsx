@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import WithParams from '../../components/WithParams';
-import Container from '../../components/Container';
 import { Navigate } from 'react-router-dom';
 import { PATHS } from '../../router/paths';
-
-class PostPage extends Component {
+import './style.css'
+class StorePage extends Component {
   state = {
-    post: null,
+    store: null,
     isLoading: true,
     isEditing: false,
   };
@@ -19,10 +18,9 @@ class PostPage extends Component {
   };
 
   componentDidMount() {
-    fetch(`https://jsonplaceholder.typicode.com/posts/1`)
+    fetch(`https://some-data.onrender.com/stores/${this.id}`)
       .then((response) => response.json())
-    //   .then((data) => this.setState({ post: data, isLoading: false }));
-    .then((data) => console.log({ post: data, isLoading: false }));
+      .then((data) => this.setState({ store: data, isLoading: false }));
 
   }
 
@@ -33,18 +31,18 @@ class PostPage extends Component {
           <p>Loading...</p>
         ) : (
           <>
-            <h1>Post {this.state.post.id}</h1>
-            <h2>{this.state.post?.title}</h2>
-            <p>{this.state.post.body}</p>
+            <h1>Store {this.state.store?.name}</h1>
+            <p>Store id :<b> {this.state.store.id} </b></p>
+            <p>Address :<b> {this.state.store.cities}</b> </p>
           </>
         )}
-        <button onClick={this.handleEdit}>Edit</button>
+        <button className="actionbutton" name='edit' onClick={this.handleEdit}>Edit</button>
         {this.state.isEditing && (
-          <Navigate to={PATHS.POSTS.EDIT.replace(':id', this.id)} replace />
+          <Navigate to={PATHS.STORES.EDIT.replace(':id', this.id)} replace />
         )}
       </>
     );
   }
 }
 
-export default WithParams(PostPage);
+export default WithParams(StorePage);

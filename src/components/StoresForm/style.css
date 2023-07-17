@@ -1,0 +1,29 @@
+.titlePage{
+    text-align: center;
+    color: brown;
+}
+.inputForm{
+    margin:30px;
+}
+.inputForm input{
+    margin: 15px;
+    width: 300px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(155, 155, 155);
+}
+.inputForm textarea{
+    margin: 15px;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(155, 155, 155);
+}
+label   {
+    margin-right: 15px;
+}
+.buttonAction  button {
+    background-color: seagreen;
+    font-size: small;
+    font-weight: bold;
+    color: black;
+}

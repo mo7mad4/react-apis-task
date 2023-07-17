@@ -1,49 +1,77 @@
-import React, { Component } from 'react';
-import Table from '../../components/Table';
-import { Navigate } from 'react-router-dom';
-import { STORE_COLUMNS } from '../../constants/Stores';
+import React, { useState, useEffect } from "react";
+import Table from "../../components/Table";
+import { Navigate } from "react-router-dom";
+import { STORE_COLUMNS } from "../../constants/Stores";
+import "./style.css";
+import axios from "axios";
+import { PATHS } from "../../router/paths";
 
-class StoresPage extends Component {
-  state = {
-    posts: [],
-    isLoading: true,
+const StoresPage = () => {
+  const [stores, setStores] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editId, setEditId] = useState(null);
+  const [rowId, setRowId] = useState(null);
+  const [isCreating, setIsCreating] = useState(false);
+
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        const response = await axios.get(
+          "https://some-data.onrender.com/stores"
+        );
+        setStores(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchStores();
+  }, []);
+
+  const handleDelete = async (id) => {
+    console.log(id, "is deleted");
+    try {
+      await axios.delete(`https://some-data.onrender.com/stores/${id}`);
+      setStores((prevStores) => prevStores.filter((store) => store.id !== id));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then((response) => response.json())
-      .then((data) => this.setState({ posts: data, isLoading: false }));
-  }
-
-  handleDelete = (id) => {
-    console.log(id, 'is deleted');
+  const handleEdit = (id) => {
+    console.log(id, "is edited");
+    setEditId(id);
   };
 
-  handleEdit = (id) => {
-    console.log(id, 'is edited');
+  const handleView = (row) => {
+    console.log(row.id, "is viewed");
+    setRowId(row.id);
   };
 
-  handleView = (row) => {
-    console.log(row.id, 'is viewed');
-    this.setState({ rowId: row.id });
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>Stores</h1>
-
-        <Table
-          columns={STORE_COLUMNS(this.handleDelete, this.handleEdit)}
-          data={this.state.posts}
-          onRowClick={this.handleView}
-          isLoading={this.state.isLoading}
-        />
-
-        {this.state.rowId && <Navigate to={`${this.state.rowId}`} />}
+  return (
+    <div>
+      <h1>Stores</h1>
+      <div className="addItems">
+        <button className="AddingItems" onClick={() => setIsCreating(true)}>
+          Add
+        </button>
       </div>
-    );
-  }
-}
+
+      <Table
+        columns={STORE_COLUMNS(handleDelete, handleEdit)}
+        data={stores}
+        onRowClick={handleView}
+        isLoading={isLoading}
+      />
+
+      {rowId && <Navigate to={`${rowId}`} replace />}
+      {editId && (
+        <Navigate to={PATHS.STORES.EDIT.replace(":id", editId)} replace />
+      )}
+      {isCreating && <Navigate to={PATHS.STORES.CREATE} replace />}
+    </div>
+  );
+};
 
 export default StoresPage;
