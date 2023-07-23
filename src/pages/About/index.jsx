@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import "./style.css";
-export default class About extends Component {
-  render() {
+const About =()=> {
     return (
       <div className="container">
         <div className="imageAbout">
@@ -25,4 +24,4 @@ export default class About extends Component {
       </div>
     );
   }
-} 
+export default About
