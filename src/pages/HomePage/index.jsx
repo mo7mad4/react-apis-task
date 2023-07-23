@@ -1,9 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import "./style.css";
 import GiedComponents from "../../components/GiedComponents";
 import HOME_PAGE_DATA from '../../mock/HomePageDATA'
-export default class HomePage extends Component {
-  render() {
+const HomePage = ()=> {
     return (
       <div>
         {HOME_PAGE_DATA.map((data,index)=>
@@ -20,4 +19,4 @@ export default class HomePage extends Component {
       </div>
     );
   }
-}
+  export default HomePage
