@@ -1,48 +1,50 @@
-import React, { Component } from 'react';
-import WithParams from '../../components/WithParams';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import { PATHS } from '../../router/paths';
-import './style.css'
-class StorePage extends Component {
-  state = {
-    store: null,
-    isLoading: true,
-    isEditing: false,
+import './style.css';
+
+const StorePage = () => {
+  const [store, setStore] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { id } = useParams();
+
+  const handleEdit = () => {
+    console.log(id, 'is edited');
+    setIsEditing(true);
   };
 
-  id = this.props?.params?.id;
-
-  handleEdit = () => {
-    console.log(this.id, 'is edited');
-    this.setState({ isEditing: true });
-  };
-
-  componentDidMount() {
-    fetch(`https://some-data.onrender.com/stores/${this.id}`)
+  useEffect(() => {
+    fetch(`https://some-data.onrender.com/stores/${id}`)
       .then((response) => response.json())
-      .then((data) => this.setState({ store: data, isLoading: false }));
+      .then((data) => {
+        setStore(data);
+        setIsLoading(false);
+      });
+  }, [id]);
 
-  }
+  return (
+    <>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h1>Store {store?.name}</h1>
+          <p>
+            Store id :<b> {store.id} </b>
+          </p>
+          <p>
+            Address :<b> {store.cities}</b>{' '}
+          </p>
+        </>
+      )}
+      <button className="actionbutton" name="edit" onClick={handleEdit}>
+        Edit
+      </button>
+      {isEditing && <Navigate to={PATHS.STORES.EDIT.replace(':id', id)} replace />}
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-        {this.state.isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <>
-            <h1>Store {this.state.store?.name}</h1>
-            <p>Store id :<b> {this.state.store.id} </b></p>
-            <p>Address :<b> {this.state.store.cities}</b> </p>
-          </>
-        )}
-        <button className="actionbutton" name='edit' onClick={this.handleEdit}>Edit</button>
-        {this.state.isEditing && (
-          <Navigate to={PATHS.STORES.EDIT.replace(':id', this.id)} replace />
-        )}
-      </>
-    );
-  }
-}
-
-export default WithParams(StorePage);
+export default StorePage;

@@ -1,81 +1,76 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import inputsArray from "../../mock/StoreForm";
 import "./style.css";
 
-class StoresForm extends Component {
-  state = {
-    name: "",
-    cities: "",
-    isGetFirstTimeData: true,
-  };
+const StoresForm = (props) => {
+  const [name, setName] = useState("");
+  const [cities, setCities] = useState("");
+  const [isGetFirstTimeData, setIsGetFirstTimeData] = useState(true);
 
-  handleSubmit = (e) => {
+  useEffect(() => {
+    if (props.store && isGetFirstTimeData) {
+      setName(props.store.name);
+      setCities(props.store.cities);
+      setIsGetFirstTimeData(false);
+    }
+  }, [props.store, isGetFirstTimeData]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
-      name: this.state.name,
-      cities: this.state.cities,
+      name,
+      cities,
     };
-
-    this.props.handleSubmit(data);
+    props.handleSubmit(data);
   };
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.store && state.isGetFirstTimeData) {
-      return {
-        name: props.store.name,
-        cities: props.store.cities,
-        isGetFirstTimeData: false,
-      };
-    }
-    return null;
-  }
-
-  handleChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     const { value, name } = e.target;
-    this.setState({ [name]: value });
+    if (name === "name") {
+      setName(value);
+    } else if (name === "cities") {
+      setCities(value);
+    }
   };
 
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        {inputsArray.map((input) => (
-          <div className="inputForm" key={input.id}>
-            <label htmlFor={input.id}>{input.label}</label>
-            {input.type === "textarea" ? (
-              <textarea
-                id={input.id}
-                name={input.name}
-                value={this.state[input.id]}
-                onChange={this.handleChangeInput}
-                style={{
-                  padding: 10,
-                  width: 400,
-                  height:200
-                }}
-              />
-            ) : (
-              <input
-                type={input.type}
-                id={input.id}
-                name={input.name}
-                value={this.state[input.id]}
-                onChange={this.handleChangeInput}
-                style={{
-                  padding: 10,
-                  width: 300,
-                }}
-              />
-            )}
-          </div>
-        ))}
-        <div className="buttonAction">
-          <button type="submit">
-            {this.props.isLoading ? "Loading..." : "Submit"}
-          </button>
+  return (
+    <form onSubmit={handleSubmit}>
+      {inputsArray.map((input) => (
+        <div className="inputForm" key={input.id}>
+          <label htmlFor={input.id}>{input.label}</label>
+          {input.type === "textarea" ? (
+            <textarea
+              id={input.id}
+              name={input.name}
+              value={input.name === "name" ? name : cities}
+              onChange={handleChangeInput}
+              style={{
+                padding: 10,
+                width: 400,
+                height: 200
+              }}
+            />
+          ) : (
+            <input
+              type={input.type}
+              id={input.id}
+              name={input.name}
+              value={input.name === "name" ? name : cities}
+              onChange={handleChangeInput}
+              style={{
+                padding: 10,
+                width: 300,
+              }}
+            />
+          )}
         </div>
-      </form>
-    );
-  }
-}
-
+      ))}
+      <div className="buttonAction">
+        <button type="submit">
+          {props.isLoading ? "Loading..." : "Submit"}
+        </button>
+      </div>
+    </form>
+  );
+};
 export default StoresForm;
